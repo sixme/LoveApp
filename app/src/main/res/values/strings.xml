@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LoveApp</string>
+    <string name="button_countforward">Next visit</string>
+    <string name="button_countback">Time together</string>
+    <string name="button_map">Map</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_first">FirstActivity</string>
+    <string name="time_together">We have been</string>
+    <string name="title_activity_together">TogetherActivity</string>
+    <string name="together">together...</string>
+    <string name="title_activity_next_visit">NextVisit</string>
+    <string name="next_visit1">It is just...</string>
+
+</resources>

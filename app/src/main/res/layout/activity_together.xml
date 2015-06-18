@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/love"
+    tools:context="com.santi.loveapp.TogetherActivity">
+
+    <TextView android:text="@string/time_together" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff477023"
+        android:textSize="48sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="97dp"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/together"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff477023"
+        android:textSize="48sp"
+        android:text="@string/together" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/time"
+        android:textColor="#ff415570"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_below="@+id/together"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="91dp" />
+</RelativeLayout>
