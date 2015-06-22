@@ -12,5 +12,7 @@
     <string name="together">together...</string>
     <string name="title_activity_next_visit">NextVisit</string>
     <string name="next_visit1">It is just...</string>
+    <string name="title_activity_map">Map</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

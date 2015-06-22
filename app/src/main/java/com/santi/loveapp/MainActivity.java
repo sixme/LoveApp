@@ -18,15 +18,23 @@ public class MainActivity extends Activity {
         Button bTogether = (Button) findViewById(R.id.button_together);
         bTogether.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent("com.santi.loveapp.TogetherActivity");
+                Intent intent = new Intent(MainActivity.this, TogetherActivity.class);
                 startActivity(intent);
             }
         });
 
         Button bVisit = (Button) findViewById(R.id.button_visit);
-        bTogether.setOnClickListener(new View.OnClickListener() {
+        bVisit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent("com.santi.loveapp.NextVisit");
+                Intent intent = new Intent(MainActivity.this, NextVisit.class);
+                startActivity(intent);
+            }
+        });
+
+        Button bMap = (Button) findViewById(R.id.button_map);
+        bMap.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Map.class);
                 startActivity(intent);
             }
         });
