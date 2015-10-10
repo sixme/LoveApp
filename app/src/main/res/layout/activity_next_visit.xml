@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="40sp"
         android:textColor="#ffff5b55"
-        android:id="@+id/textView2" />
+        android:id="@+id/label" />
 
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,10 +20,27 @@
         android:textColor="#ffcafffc"
         android:id="@+id/time_visit"
         android:layout_marginTop="45dp"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/label"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date_button"
+        android:id="@+id/date_button"
+        android:layout_below="@+id/time_visit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="97dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_button"
+        android:id="@+id/delete_button"
+        android:layout_below="@+id/date_button"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
