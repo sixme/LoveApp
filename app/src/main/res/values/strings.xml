@@ -17,5 +17,6 @@
     <string name="label">It is just...</string>
     <string name="date_button">SELECT DATE</string>
     <string name="delete_button">DELETE DATE</string>
+    <string name="title_activity_search_map">SearchMapActivity</string>
 
 </resources>

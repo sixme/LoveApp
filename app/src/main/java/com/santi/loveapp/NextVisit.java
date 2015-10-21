@@ -2,35 +2,36 @@ package com.santi.loveapp;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.os.CountDownTimer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 
-public class NextVisit extends Activity implements DatePickerFragment.TheListener{
+
+public class NextVisit extends Activity implements DatePickerFragment.TheListener {
     protected Vibrator vibrate;
-    protected int SECONDS_IN_A_DAY = 24 * 60 * 60;
     protected String filePath = "";
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    final long[] pattern = {0, 1000, 500, 1000, 500, 1000, 500, 1000 };
+    final long[] pattern = {0, 1000, 500, 1000, 500, 1000, 500, 1000};
     CountDownTimer timer = null;
     String dateString = "";
-
+    boolean done = false; //TO FIX, this is to avoid duplicities on saving the date, dunno why it goes twice...
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,55 +41,59 @@ public class NextVisit extends Activity implements DatePickerFragment.TheListene
         final Button bDate = (Button) findViewById(R.id.date_button);
         final Button bDelete = (Button) findViewById(R.id.delete_button);
         File dir = new File(getFilesDir(), "loveApp");
-        if(!dir.exists())
+        if (!dir.exists())
             dir.mkdirs();
-        final File f =  new File(getFilesDir()+"/loveApp"+"/love_date.txt");
+        final File f = new File(getFilesDir() + "/loveApp" + "/love_date.txt");
         filePath = f.getAbsolutePath();
         vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         bDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(f.exists()) {
+                if (f.exists()) {
                     f.delete();
                     System.out.println("File deleted successfully");
                 }
-                    bDate.setVisibility(View.VISIBLE);
-                    label.setText(R.string.next_visit1);
+                bDate.setVisibility(View.VISIBLE);
+                label.setText(R.string.next_visit1);
+                if(timer != null){
+                    System.out.println("I cancelled the timer");
                     timer.cancel();
                     countdown.setText("");
-                    System.out.println("I cancelled the timer");
-
-                    bDelete.setVisibility(View.INVISIBLE);
-                    bDate.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            DialogFragment picker = new DatePickerFragment();
-                            bDelete.setVisibility(View.VISIBLE);
-                            bDate.setVisibility(View.INVISIBLE);
-                            picker.show(getFragmentManager(), "datePicker");
-                        }
-                    });
+                    System.out.println("I put the text off");
+                    countdown.setText("");
+                    System.out.println("again, sometimes the timer keeps ticking");
+                }
+                bDelete.setVisibility(View.INVISIBLE);
+                bDate.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        DialogFragment picker = new DatePickerFragment();
+                        bDelete.setVisibility(View.VISIBLE);
+                        bDate.setVisibility(View.INVISIBLE);
+                        picker.show(getFragmentManager(), "datePicker");
+                    }
+                });
 
 
             }
         });
 
-        if(f.exists()){
+        if (f.exists()) {
             System.out.println("File exists");
             bDate.setVisibility(View.INVISIBLE);
             label.setText(getString(R.string.label));
-            try{
+            try {
                 BufferedReader br = new BufferedReader(new FileReader(f));
                 dateString = br.readLine();
                 br.close();
-                System.out.println("Date: "+dateString);
+                System.out.println("Date: " + dateString);
                 Date finalDate = formatter.parse(dateString);
                 setCountdown(finalDate);
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 label.setText("ERROR");
             }
 
-        }else{
+        } else {
             System.out.println("File DOES NOT EXIST");
             bDelete.setVisibility(View.INVISIBLE); //Removing the delete date button
             bDate.setOnClickListener(new View.OnClickListener() {
@@ -99,30 +104,35 @@ public class NextVisit extends Activity implements DatePickerFragment.TheListene
                     picker.show(getFragmentManager(), "datePicker");
                 }
             });
-     }
+        }
     }
-    public void setCountdown(Date finishDate){
+
+    public void setCountdown(Date finishDate) {
         long end = finishDate.getTime();
-        final TextView countdown = (TextView)  findViewById(R.id.time_visit);
-        timer = new CountDownTimer(end, 1000){
+        final TextView countdown = (TextView) findViewById(R.id.time_visit);
+        timer = new CountDownTimer(end - System.currentTimeMillis(), 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long now = Calendar.getInstance(Locale.GERMANY).getTimeInMillis()+1000;
-                long diff =  millisUntilFinished - now;
-                long diffSec = diff / 1000;
+                long millis = millisUntilFinished / 1000;
 
-                long days = diffSec / SECONDS_IN_A_DAY;
-                long secondsDay = diffSec % SECONDS_IN_A_DAY;
-                long seconds = secondsDay % 60;
-                long minutes = (secondsDay / 60) % 60;
-                long hours = (secondsDay / 3600);
-                countdown.setText(days+ " days, "+ hours + "hours, "+minutes + "m, "+seconds + "s remaining!");
+                String timeText =
+                        String.format("%d days, %d hours, %d minutes, %d seconds!", millis / 86400,
+                                 (millis % 86400) / 3600,
+                                ((millis % 86400) % 3600) / 60,
+                                ((millis % 86400) % 3600) % 60
+                        );
+
+                countdown.setText(timeText);
+
             }
 
             @Override
             public void onFinish() {
-                countdown.setText("done!");
-                vibrate.vibrate(pattern,-1);
+                countdown.setText("Today is the day!");
+                vibrate.vibrate(pattern, -1);
+                File f = new File(getFilesDir() + "/loveApp" + "/love_date.txt");
+                if(f.exists())
+                    f.delete();
             }
         }.start();
 
@@ -132,6 +142,33 @@ public class NextVisit extends Activity implements DatePickerFragment.TheListene
 
     @Override
     public void returnDate(String date) {
+        //Easy way to avoid repetition... needs fixing.
+        if(done == false){
+            done = true;
+        }else{
+            done = false;
+            return;
+        }
+        Date parsedDate = null;
+        try{
+            parsedDate = formatter.parse(date);
+        }catch (ParseException pe){
+            pe.printStackTrace();
+            return;
+        }
+        if(parsedDate != null  && parsedDate.before(new Date())){
+           Toast toast = Toast.makeText(getApplicationContext(), "Please select a future date, don't cheat :P",
+                    Toast.LENGTH_LONG);
+            ViewGroup group = (ViewGroup) toast.getView();
+            TextView messageTextView = (TextView) group.getChildAt(0);
+            messageTextView.setTextSize(25);
+            toast.show();
+            Button bDelete = (Button) findViewById(R.id.delete_button);
+            bDelete.setVisibility(Button.INVISIBLE);
+            Button bDate = (Button) findViewById(R.id.date_button);
+            bDate.setVisibility(Button.VISIBLE);
+            return;
+        }
         dateString = date;
         TextView label = (TextView) findViewById(R.id.label);
         label.setText(R.string.label);
@@ -140,13 +177,14 @@ public class NextVisit extends Activity implements DatePickerFragment.TheListene
             bw = new BufferedWriter(new FileWriter(new File(filePath)));
             bw.write(dateString);
             bw.close();
-            System.out.println("Saved the file, date is: "+ dateString);
+            System.out.println("Saved the file, date is: " + dateString);
             Date finishDate = formatter.parse(date);
             setCountdown(finishDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -6,14 +6,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import android.util.Log;
 
 import java.text.DecimalFormat;
 
@@ -21,8 +20,8 @@ public class Map extends FragmentActivity implements LocationListener{
 
     TextView txt;
     GoogleMap googleMap;
-    double fixLat = 42.4338608;
-    double fixLon = -8.6393457;
+    double fixLat = 52.0085505;
+    double fixLon = 4.364154221;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +80,11 @@ public class Map extends FragmentActivity implements LocationListener{
         txt = (TextView) findViewById(R.id.text);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude);
+        //LatLng latLng = new LatLng(latitude, longitude);
         //googleMap.addMarker(new MarkerOptions().position(latLng).title("ME").snippet("I am here!"));
         //googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("0.00");
 
         double distance = calculateDistance(fixLat,fixLon,latitude,longitude);
         txt.setText("We are just: "+ df.format(distance)+" km away!!");
